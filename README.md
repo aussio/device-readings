@@ -51,7 +51,7 @@ curl -s localhost:8000/reading -d '
 curl -s localhost:8000/reading/12256582-6908-559e-887e-a949ec199272
 ```
 
-**List all device readings (not in spec, but nice for debugging):
+**List all device readings**: *(not in spec, but nice for debugging)*
 
 ```
 curl -s localhost:8000/reading
@@ -90,4 +90,4 @@ refactor? What other tradeoffs did you make?
 * **Cache serialization**: My cache in model.py is essentially my DAO layer. I ended up hand-performing the serialization between the validated input/output JSON and the cache format to support using dictionaries for quick lookup and updating. In a real project, I would have used Marshmallow's ability to [serialize directly into Python objects](https://marshmallow.readthedocs.io/en/stable/quickstart.html#deserializing-to-objects) which would have made that code considerably more readable. Then my database would keep the data nice and efficiently organized/accessible in storage.
     * Related to the above reflection - I actually went down that path originally, and you can see the commented code left over in models.py.
 * **Handling of UUIDs**: Flask validates UUIDs in an unobvious way, imo. If you pass /readings/<id> a non-UUID, it gives a 404 for the URL as opposed to a 400 for it being a bad UUID. That's why I'm treating `id` as a string so everything plays nicely. I'm sure this is totally fixable.
-* **Testing**: I'm a huge HUGE advocate for automated tests. I'll transparently admit that I don't tend to have the best habits around TDD though. 😅 With that, I would have added more robust tests to this project. I spent more than my 2 allotted hours on the homework, so I decided to save some time here. My integration tests cover our main acceptance criteria, but I wrote nothing automated to poke at our error cases. I'm also not asserting on the shape of the body, which is critical to testing the contract as would absolutely be included in production code.
+* **Testing**: I'm a huge HUGE advocate for automated tests. I'll transparently admit that I don't have the best habits around TDD though. 😅 With that, I would have added more robust tests to this project. I spent more than my 2 allotted hours on the homework, so I decided to save some time here. My integration tests cover our main acceptance criteria, but I wrote nothing automated to poke at our error cases. I'm also not asserting much on the shape of the body, which is critical to testing the contract and would absolutely be included in production code.
